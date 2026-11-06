@@ -65,7 +65,7 @@ LD_FLAGS					+= -Wl,-Map=$(TARGET_MAP)
 
 # -------------------- Каталоги поиска заголовочных файлов --------------
 INC							+= $(SRC_DIR)
-INC							+= $(CMSIS_INC_DIR)
+INC							+= $(CMSIS_CORE_INC_DIR)
 INC							+= $(DEVICE_INC_DIR)
 
 INCLUDES					+= $(foreach i,$(INC),-I$i)
