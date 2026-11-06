@@ -49,11 +49,17 @@ ARCH_FLAGS					+= -mfix-cortex-m3-ldrd
 ARCH_FLAGS					+= -masm-syntax-unified
 
 # -------------------- Флаги компилятора -------------------------------
+
+# формирование файлов зависимостей для объектников
 C_FLAGS						+= -MD
+# Вывод всх предупреждений
 C_FLAGS						+= -Wall
+# Педантичный режим компилятора для исключения неоднозначности кода
 C_FLAGS						+= -Wpedantic
+# Выбор используемого стандарта языка Си
 C_FLAGS						+= -std=c17
 
+# Поределяем уровень оптимизации и хранения отладочных данных исходя из типа сборки Debug/Release
 ifeq ($(DEBUG_BUILD),true)
 C_FLAGS						+= -g -ggdb -Og -gdwarf-4
 else
@@ -62,29 +68,49 @@ endif
 
 # -------------------- Флаги компоновщика -------------------------------
 LD_FLAGS					+= -Wl,-Map=$(TARGET_MAP)
+LD_FLAGS					+= -Wl,--print-memory-usage
 
 # -------------------- Каталоги поиска заголовочных файлов --------------
 INC							+= $(SRC_DIR)
 INC							+= $(CMSIS_CORE_INC_DIR)
 INC							+= $(DEVICE_INC_DIR)
 
+# Собираем каталоги поиска файлов декларации в вормат GCC
 INCLUDES					+= $(foreach i,$(INC),-I$i)
 
 #-------------------- Библиотеки --------------------------------------
-LD_FLAGS					+= --specs=nano.specs
+LIBS						+= --specs=nano.specs
 ifeq ($(DEBUG_BUILD),true)
-LD_FLAGS					+= --specs=rdimon.specs
+# Для отладки будем использовать semihosting из библиотеки rdimon
+LIBS						+= --specs=rdimon.specs
 else
-LD_FLAGS					+= --specs=nosys.specs
+# Для релиз сборки используем заглушки потокового ввода вывода библиотеки nosys
+LIBS						+= --specs=nosys.specs
 endif
 
+# библиотека базовых функций языка Си. По сути линкуется всегда, но лучше указать явно
+LIBLIST						+= c
+LIBLIST						+= g
+LIBLIST						+= gcc
+# Библиотека математических операций
+LIBLIST						+= m
+
+# Собираем библиотеки в формат строки компановки
+LIBS						+= -Wl,--start-group
+LIBS						+= $(foreach l,$(LIBLIST),-l$l)
+LIBS						+= -Wl,--end-group
+
 # -------------------- Правила сборки ----------------------------------
+
+# Правило сборки default встречается первым, соответстенно оно будет собираться по умолчанию,
+# если иное парвило сборки не указанно в команде make
 default: $(TARGET_ELF) $(TARGET_BIN)
 
 clean:
 	$(ECHO) Очистка проекта $(PROJECT_NAME)
 	$(RM) $(BUILD_DIR)
 
+# Правила динамического создания каталогов сборки
 $(OBJ_DIR):
 	$(MKDIR) $@
 
@@ -94,16 +120,38 @@ $(DEST_DIR):
 $(MAP_DIR):
 	$(MKDIR) $@
 
+# Создание бинарного образа прошивки
 $(TARGET_BIN): $(TARGET_ELF)
+	$(ECHO) Копирование бинарного образа $@ из ELF файла $<
 	$(OBJCOPY) $< $@ -Obinary
 
+# Компановка ELF32 образа прошивки (помимо исполняемого кода содержит отладочную и прочую информацию)
 $(TARGET_ELF): $(OBJECTS) $(DEST_DIR) $(MAP_DIR)
+	$(ECHO) Компановка ELF файла $@ из объектников $(OBJECTS)
 	$(LD) -o $@ $(OBJECTS) $(ARCH_FLAGS) $(LD_FLAGS) $(LIBS) $(LD_DEFS)
 
+# Правило для компиляции объкетных файлов из пользовательких исходных кодов
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(OBJ_DIR)
+	$(ECHO) Компиляция объектного файла $@ из $<
 	$(CC) -c $< -o $@ $(ARCH_FLAGS) $(C_FLAGS) $(INCLUDES) $(C_DEFS)
 
+# Правило для компиляции объкетных файлов из исходных кодов платформо-зависимого кода шаблона CMSIS
 $(OBJ_DIR)/%.o: $(DEVICE_SRC_DIR)/%.c $(OBJ_DIR)
+	$(ECHO) Компиляция объектного файла $@ из $<
 	$(CC) -c $< -o $@ $(ARCH_FLAGS) $(C_FLAGS) $(INCLUDES) $(C_DEFS)
 
+# Подключение файлов зависимостей
 include $(wildcard $(OBJ_DIR)/*.d)
+
+# Сокрытие вывод компиляции для целей
+.SILENT: $(BUILD_DIR)
+.SILENT: $(OBJ_DIR)
+.SILENT: $(DEST_DIR)
+.SILENT: $(MAP_DIR)
+.SILENT: clean
+.SILENT: $(TARGET_BIN)
+
+# Экранирование (обязательное испольнение) целей сборки
+.PHONY: clean
+.PHONY: $(PROJECT_ELF)
+.PHONY: $(PROJECT_BIN)
