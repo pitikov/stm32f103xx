@@ -1,0 +1,13 @@
+*.o
+*.elf
+*.bin
+*.hex
+*.HEX
+*.map
+*.objdumb
+*.o.d
+~*
+*~
+*.bak
+*.BAK
+*.backup
