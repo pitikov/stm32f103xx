@@ -16,8 +16,8 @@ MKDIR						:= mkdir -p -m 0764
 # ------------------- Каталоги проекта ---------------------------------
 
 SRC_DIR						:= ./src
-CMSIS_DIR					:= ./CMSIS
-CMSIS_INC_DIR				:= $(CMSIS_DIR)/Include
+CMSIS_CORE_DIR				:= ./CMSIS/Core/
+CMSIS_CORE_INC_DIR			:= $(CMSIS_DIR)/Include
 DEVICE_DIR					:= ./STM32F103xx
 DEVICE_INC_DIR				:= $(DEVICE_DIR)/Include
 DEVICE_SRC_DIR				:= $(DEVICE_INC_DIR:Include=Source)
