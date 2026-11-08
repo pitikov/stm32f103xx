@@ -25,6 +25,7 @@
 
 
 #include <stdint.h>
+#include <stdbool.h>
 #include "stm32f103xx.h"
 
 /*---------------------------------------------------------------------------
@@ -99,4 +100,13 @@ void SystemInit (void)
 #endif
 
   SystemCoreClock = SYSTEM_CLOCK;
+}
+
+extern void main(void);
+void main_venir(void) {
+  main();
+
+  // Dead loop tarp after main execute
+  while (1) 
+    __WFI();
 }

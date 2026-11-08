@@ -9,15 +9,16 @@
 int main(void) {
 #ifdef Debug
     printf("I`m was born\n");
+    printf("SystemCoreClock: %lu\n", SystemCoreClock);
 #endif //Debug
 
     SysTick_Config(SystemCoreClock/100);
 
-    while (true)
-        __WFI();
     return EXIT_SUCCESS;
 }
 
 void SysTick_Handler(void) {
+#ifdef Debug
     printf("SysTick_Handler\n");
+#endif
 }
