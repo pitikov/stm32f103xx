@@ -208,6 +208,9 @@ $(OBJ_DIR)/%.o: $(DEVICE_SRC_DIR)/%.c $(OBJ_DIR)
 # Подключение файлов зависимостей
 include $(wildcard $(OBJ_DIR)/*.d)
 
+gdb: $(TARGET_ELF)
+	gdb-multiarch -x openocd.gdb --tui $<
+
 # Сокрытие вывод компиляции для целей
 .SILENT: $(BUILD_DIR)
 .SILENT: $(OBJ_DIR)

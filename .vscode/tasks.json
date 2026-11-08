@@ -12,6 +12,16 @@
                 "isDefault": true
             },
             "problemMatcher": "$gcc"
+        },
+        {
+            "label": "OpenOCD + JLink",
+            "type": "shell",
+            "group": "none",
+            "dependsOn": [
+                "make"
+            ],
+            "command": "openocd -f interface/jlink.cfg -c 'transport select jtag' -f target/stm32f1x.cfg",
+            "problemMatcher": []
         }
     ]
 }
