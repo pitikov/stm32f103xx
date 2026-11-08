@@ -96,6 +96,9 @@ else
 C_DEFS						+= -DReleas
 endif
 
+# Линейка процессоров STM32F103xx: LOW_DENSITY_LINE, MEDIUM_DENSITY_LINE, HIGH_DENSITY_LINE EXTENDED_DENSITY_LINE, CONNECTIVITY_LINE
+C_DEFS						+= -DPERFOMANCE_LINE=MEDIUM_DENSITY_LINE
+
 # -------------------- Флаги компоновщика -------------------------------
 LD_FLAGS					+= -Wl,-Map=$(TARGET_MAP)
 LD_FLAGS					+= -Wl,--print-memory-usage
