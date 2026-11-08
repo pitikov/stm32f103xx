@@ -1,6 +1,6 @@
 /**************************************************************************//**
  * @file     stm32f103xx.h
- * @brief    CMSIS-Core(M) Device Header File for Device <Device>
+ * @brief    CMSIS-Core(M) Device Header File for Device STM32F103xx
  *
  * @version  V1.0.0
  * @date     18. July 2023
@@ -58,7 +58,7 @@ typedef enum IRQn
   PendSV_IRQn            =  -2,  /* 14 Pendable request for system service */
   SysTick_IRQn           =  -1,  /* 15 System Tick Timer */
 
-/* ================        <Device> Interrupt Numbers       ================ */
+/* ================        STM32F103xx Interrupt Numbers       ================ */
 /* ToDo: Add here your device specific interrupt numbers
          according the interrupt handlers defined in startup_Device.s
          eg.: Interrupt for Timer#1       TIM1_IRQHandler   ->   TIM1_IRQn */

@@ -116,17 +116,17 @@ LD_DEFS						+= -Wl,--defsym=_start=main
 # При наличии скрипта компановщика передаем ему параметры нашего контроллера
 ifeq ($(LD_SCRIPT_EXISTS), true)
 # Размер кучи
-LD_DEFS						+= -Wl,--defsym=__HEAP_SIZE=$(HEAP_SZIE)
+LD_DEFS						+= -Wl,--defsym=__HEAP_SIZE=$(HEAP_SIZE)
 # Размер стека
 LD_DEFS						+= -Wl,--defsym=__STACK_SIZE=$(STACK_SIZE)
 # Адрес начала FLASH_ROM
-LD_DEFS						+= -Wl,--defsym=FLASH_ORIGIN=0x08000000
+LD_DEFS						+= -Wl,--defsym=__ROM_BASE=0x08000000
 # Размер FLASH_ROM
-LD_DEFS						+= -Wl,--defsym=FLASH_SIZE=$(FLASH_SIZE)
+LD_DEFS						+= -Wl,--defsym=__ROM_SIZE=$(FLASH_SIZE)
 # Адрес RAM
-LD_DEFS						+= -Wl,--defsym=RAM_ORIGIN=0x20000000
+LD_DEFS						+= -Wl,--defsym=__RAM_BASE=0x20000000
 # Размер RAM
-LD_DEFS						+= -Wl,--defsym=RAM_SIZE=$(RAM_SIZE)
+LD_DEFS						+= -Wl,--defsym=__RAM_SIZE=$(RAM_SIZE)
 endif
 
 # -------------------- Каталоги поиска заголовочных файлов --------------

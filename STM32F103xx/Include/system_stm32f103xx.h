@@ -1,7 +1,7 @@
 /*************************************************************************//**
- * @file     system_<Device>.h
+ * @file     system_stm32f103xx.h
  * @brief    CMSIS-Core(M) Device Peripheral Access Layer Header File for
- *           Device <Device>
+ *           Device STM32F103xx
  * @version  V1.0.1
  * @date     11. July 2022
  *****************************************************************************/

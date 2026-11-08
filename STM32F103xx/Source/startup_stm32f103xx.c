@@ -1,7 +1,7 @@
 /******************************************************************************
- * @file     startup_<Device>.c
+ * @file     startup_stm32f103xx.c
  * @brief    CMSIS-Core(M) Device Startup File for
- *           Device <Device>
+ *           Device STM32F103xx
  * @version  V1.0.0
  * @date     20. January 2021
  ******************************************************************************/
@@ -47,16 +47,16 @@ __NO_RETURN void Default_Handler(void);
   Exception / Interrupt Handler
  *---------------------------------------------------------------------------*/
 /* Exceptions */
-void NMI_Handler            (void) __attribute__ ((weak, alias("Default_Handler")));
-void HardFault_Handler      (void) __attribute__ ((weak));
-void MemManage_Handler      (void) __attribute__ ((weak, alias("Default_Handler")));
-void BusFault_Handler       (void) __attribute__ ((weak, alias("Default_Handler")));
-void UsageFault_Handler     (void) __attribute__ ((weak, alias("Default_Handler")));
-void SecureFault_Handler    (void) __attribute__ ((weak, alias("Default_Handler")));
-void SVC_Handler            (void) __attribute__ ((weak, alias("Default_Handler")));
-void DebugMon_Handler       (void) __attribute__ ((weak, alias("Default_Handler")));
-void PendSV_Handler         (void) __attribute__ ((weak, alias("Default_Handler")));
-void SysTick_Handler        (void) __attribute__ ((weak, alias("Default_Handler")));
+void NMI_Handler            (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void HardFault_Handler      (void) __attribute__ ((weak, noreturn));
+void MemManage_Handler      (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void BusFault_Handler       (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void UsageFault_Handler     (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void SecureFault_Handler    (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void SVC_Handler            (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void DebugMon_Handler       (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void PendSV_Handler         (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void SysTick_Handler        (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
 
 /* ToDo: Add your device specific interrupt handler */
 // void <DeviceInterrupt first>_Handler     (void) __attribute__ ((weak, alias("Default_Handler")));
@@ -103,11 +103,12 @@ extern const VECTOR_TABLE_Type __VECTOR_TABLE[__VTABLE_SIZE];
   PendSV_Handler,                      /*  -2 PendSV Handler */
   SysTick_Handler,                     /*  -1 SysTick Handler */
 
-/* ToDo: Add your device specific interrupt vectors */
-  /* Interrupts */
-  // <DeviceInterrupt first>_Handler,     /* first Device Interrupt */
-  // ...
-  // <DeviceInterrupt last>_Handler       /* last Device Interrupt */
+#ifdef PERFOMANCE_LINE
+#if PERFOMANCE_LINE == CONNECTIVITY_LINE
+#elif PERFOMANCE_LINE == EXTENDED_DENSITY_LINE
+#else
+#endif // PERFOMANCE_LINE select
+#endif // PERFOMANCE_LINE
 };
 
 #if defined ( __GNUC__ )

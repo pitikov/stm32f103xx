@@ -1,7 +1,7 @@
 /*************************************************************************//**
- * @file     system_<Device>.c
+ * @file     system_stm32f103xx.c
  * @brief    CMSIS-Core(M) Device Peripheral Access Layer Source File for
- *           Device <Device>
+ *           Device STM32F103xx
  * @version  V1.0.0
  * @date     20. January 2021
  *****************************************************************************/
@@ -23,16 +23,9 @@
  * limitations under the License.
  */
 
-/* ToDo: rename this file from 'system_Device.c' to 'system_<Device>.c according to your device naming */
 
 #include <stdint.h>
 #include "stm32f103xx.h"
-
-/* ToDo: Include partition header file if TZ is used */
-#if defined (__ARM_FEATURE_CMSE) &&  (__ARM_FEATURE_CMSE == 3U)
-  #include "partition_<Device>.h"
-#endif
-
 
 /*---------------------------------------------------------------------------
   Define clocks
@@ -84,18 +77,6 @@ void SystemInit (void)
 /* ToDo: Initialize VTOR if available */
 #if defined (__VTOR_PRESENT) && (__VTOR_PRESENT == 1U)
   SCB->VTOR = (uint32_t)(&__VECTOR_TABLE[0]);
-#endif
-
-/* ToDo: Enable co-processor if it is used */
-#if (defined (__FPU_USED) && (__FPU_USED == 1U)) || \
-    (defined (__ARM_FEATURE_MVE) && (__ARM_FEATURE_MVE > 0U))
-  SCB->CPACR |= ((3U << 10U*2U) |           /* enable CP10 Full Access */
-                 (3U << 11U*2U)  );         /* enable CP11 Full Access */
-#endif
-
-/* ToDo: Initialize SAU if TZ is used */
-#if defined (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U)
-  TZ_SAU_Setup();
 #endif
 
   SystemCoreClock = SYSTEM_CLOCK;
