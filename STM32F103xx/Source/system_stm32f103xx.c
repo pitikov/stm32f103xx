@@ -30,11 +30,30 @@
 /*---------------------------------------------------------------------------
   Define clocks
  *---------------------------------------------------------------------------*/
-/* ToDo: Add here your necessary defines for device initialization
-         following is an example for different system frequencies */
-#define XTAL            (12000000U)       /* Oscillator frequency */
+#ifndef __HSE_VALUE
+#warning __HSE_VALUE not defined
+#else
+#define HSE_VALUE __HSE_VALUE
+#endif //__HSE_VALUE
 
-#define SYSTEM_CLOCK    (5 * XTAL)
+#ifndef __LSE_VALUE
+#waring __LSE_VALUE not defined
+#else
+#define LSE_VALUE __LSE_VALUE
+#endif //__LSE_VALUE
+
+#define LSI_VALUE 40000
+#define HSI_VALUE 8000000
+
+#ifndef __HSE_VALUE
+#define SYSTEM_CLOCK    HSI_VALUE
+#else 
+#if HSE_VALUE == 8000000
+#define SYSTEM_CLOCK   72000000
+#else
+#error Set your-self SYSTEM_CLOCK value
+#endif 
+#endif //__HSE_VALUE
 
 
 /*---------------------------------------------------------------------------
