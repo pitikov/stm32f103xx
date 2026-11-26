@@ -183,19 +183,42 @@ typedef enum IRQn
 /* ============     Device Specific Peripheral Address Map      ============ */
 /* ========================================================================= */
 
+#define FLASH_MEMORY_BASE                         (0x08000000UL)                            /* FLASH (ROM) Memory base address */
+#define SYSTEM_MEMORY_BASE                        (0x1FFFF000UL)                            /* System memory base address */
+#define OPTION_BASE                               (0x1FFFF800UL)                            /* Options base */
 
-/* ToDo: add here your device peripherals base addresses
-         following is an example for timer */
+#define TIM2_BASE                                 (0x40000000UL)                            /* TIM2 Timer base address */
+#define TIM3_BASE                                 (0x40000400UL)                            /* TIM3 Timer base address */
+#define TIM4_BASE                                 (0x40000800UL)                            /* TIM4 Timer base address */
+#define RTC_BASE                                  (0x40002800UL)                            /* RTC Timer base address */
+#define WWDG_BASE                                 (0x40002C00UL)                            /* WWDGT Timer base address */
+#define IWDG_BASE                                 (0x40003000UL)                            /* IWDGT Timer base address */
+#define SPI2_ABSE                                 (0x40003800UL)                            /* SPI2 base address */
+#define USART2_BASE                               (0x40004400UL)                            /* USART2 base address */
+#define USART3_BASE                               (0x40004800UL)                            /* USART2 base address */
+#define I2C1_BASE                                 (0x40005400UL)                            /* I2C1 base address */
+#define I2C2_BASE                                 (0x40005800UL)                            /* I2C2 base address */
+#define USB_BASE                                  (0x40005C00UL)                            /* USB registers base address */
+#define bxCAN_BASE                                (0x40006400UL)                            /* bxCAN base address */
+#define BKP_BASE                                  (0x40006C00UL)                            /* BKP base address */
+#define PWR_BASE                                  (0x40007000UL)                            /* PWR base address */
+#define AFIO_BASE                                 (0x40010000UL)                            /* AFIO base address */
+#define EXTI_BASE                                 (0x40010400UL)                            /* EXTI base address */
+#define GPIOA_BASE                                (0x40010800UL)                            /* GPIO port A base address */
+#define GPIOB_BASE                                (0x40010C00UL)                            /* GPIO port B base address */
+#define GPIOC_BASE                                (0x40011000UL)                            /* GPIO port C base address */
+#define GPIOD_BASE                                (0x40011400UL)                            /* GPIO port D base address */
+#define GPIOE_BASE                                (0x40011800UL)                            /* GPIO port E base address */
+#define ADC1_BASE                                 (0x40012400UL)                            /* ADC1 base address */
+#define ADC2_BASE                                 (0x40012800UL)                            /* ADC1 base address */
+#define TIM1_BASE                                 (0x40012C00UL)                            /* TIM1 Timer base address */
+#define SPI1_BASE                                 (0x40013000UL)                            /* SPI1 base address */
+#define USART1_BASE                               (0x40013800UL)                            /* USART1 base address */
+#define DMA_BASE                                  (0x40020000UL)                            /* DMA base address */
+#define RCC_BASE                                  (0x40021000UL)                            /* RCC base address */
+#define FLASH_BASE                                (0x40022000UL)                            /* FLASH base address */
+#define CRC_BASE                                  (0x40023000UL)                            /* CRC base address */
 
-/* Peripheral and SRAM base address */
-// #define <DeviceAbbreviation>_FLASH_BASE       (0x00000000UL)                              /* (FLASH     ) Base Address */
-// #define <DeviceAbbreviation>_SRAM_BASE        (0x20000000UL)                              /* (SRAM      ) Base Address */
-// #define <DeviceAbbreviation>_PERIPH_BASE      (0x40000000UL)                              /* (Peripheral) Base Address */
-
-// /* Peripheral memory map */
-// #define <DeviceAbbreviation>TIM0_BASE         (<DeviceAbbreviation>_PERIPH_BASE)          /* (Timer0    ) Base Address */
-// #define <DeviceAbbreviation>TIM1_BASE         (<DeviceAbbreviation>_PERIPH_BASE + 0x0800) /* (Timer1    ) Base Address */
-// #define <DeviceAbbreviation>TIM2_BASE         (<DeviceAbbreviation>_PERIPH_BASE + 0x1000) /* (Timer2    ) Base Address */
 
 
 /* ========================================================================= */
