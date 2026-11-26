@@ -243,6 +243,18 @@ Flash memory allocation for STM32F103xx medium density perfomance line devices
 // #define <DeviceAbbreviation>_TIM1        ((<DeviceAbbreviation>_TMR_TypeDef *) <DeviceAbbreviation>TIM0_BASE)
 // #define <DeviceAbbreviation>_TIM2        ((<DeviceAbbreviation>_TMR_TypeDef *) <DeviceAbbreviation>TIM0_BASE)
 
+
+/* Макросы манипуляциями битовыси полями регистров */
+
+#define BITS_GET(Reg, Mask)   ((Reg) & (Mask))
+#define BITS_SET(Reg, Mask)   (Reg) |= (Mask)
+#define BITS_CLEAR(Reg, Mask) (Reg) &= ~(Mask)
+#define BITS_MODIFY(Reg, Clear, Set)    BITS_CLEAR(Reg, Clear); BITS_SET(Reg, Set)
+
+#define REG_GET(Reg)          (Reg)
+#define REG_CLEAR(Reg)        (Reg) = 0
+#define REG_SET(Reg, Val)     (Reg) = (Val)
+
 #ifdef __cplusplus
 }
 #endif
