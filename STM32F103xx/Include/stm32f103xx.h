@@ -220,6 +220,16 @@ typedef enum IRQn
 #define CRC_BASE                                  (0x40023000UL)                            /* CRC base address */
 
 
+/*---------------------------------------------------------------------------
+Flash memory allocation for STM32F103xx medium density perfomance line devices
+-----------------------------------------------------------------------------*/
+#define __FLASH_MEMORY_PAGE_COUNT                 128
+#define __FLASH_MEMORY_PAGE_SIZE                  0x400
+#define __FLASH_MEMORY_PAGE_VALID(n)              ((uint8_t)(n) < __FLASH_MEMORY_PAGE_COUNT)
+
+#define FLASH_MEMORY_PAGE(n)                      (PAGE_VALID(n) ? \
+                                                      (volatile uint32_t*)(FLASH_MEMORY_BASE + n * __FLASH_MEMORY_PAGE_SIZE)) : \
+                                                      (volatile uint32_t*)0
 
 /* ========================================================================= */
 /* ============             Peripheral declaration              ============ */
