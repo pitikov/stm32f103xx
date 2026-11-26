@@ -122,6 +122,74 @@ typedef enum IRQn
 /* ============       Device Specific Peripheral Section        ============ */
 /* ========================================================================= */
 
+/*---------------------------------------------------------------------------
+Flash memory registers
+----------------------------------------------------------------------------*/
+typedef struct {
+  __IOM uint32_t    ACR;      // Flash access control register
+  __OM  uint32_t    KEYR;     // FPEC key register
+  __OM  uint32_t    OPTKEYR;  // Flash OPTKEY register
+  __IOM uint32_t    SR;       // Flash status register
+  __IOM uint32_t    CR;       // Flash control register
+  __IM  uint32_t    __unused;
+  __OM  uint32_t    AR;       // Flash address register
+  __IOM uint32_t    OBR;      // Option byte register
+  __IM  uint32_t    WRPR;     // Write protection register
+} FLASH_TypeDef;
+
+#define FLASH_ACR_Default     (uint32_t)(0x00000030UL)
+#define FLASH_SR_Default      (uint32_t)(0x00000000UL)
+#define FLASH_CR_Default      (uint32_t)(0x00000080UL)
+#define FLASH_AR_Default      (uint32_t)(0x00000000UL)
+#define FLASH_OBR_Default     (uint32_t)(0x03FFFFFCUL)
+#define FLASH_WRPR_Default    (uint32_t)(0xFFFFFFFFUL)
+
+// Flash access control register
+#define FLASH_ACR_PRFTBS      (uint32_t)(1<<5)          // Prefetch buffer status
+#define FLASH_ACR_PRFTBE      (uint32_t)(1<<4)          // Prefetch buffer enable
+#define FLASH_ACR_HLFCYA      (uint32_t)(1<<3)          // Flash half cycle access enable
+#define FLASH_ACR_LATENCY     (uint32_t)(7)             // These bits represent the ratio of the SYSCLK (system clock) period to the Flash access time.
+
+typedef enum {
+  FLASH_ACR_LATENCY_Zero    = 0,    // Zero wait state, if 0 < SYSCLK≤ 24 MHz
+  FLASH_ACR_LATENCY_One     = 1,    // One wait state, if 24 MHz < SYSCLK ≤ 48 MHz
+  FLASH_ACR_LATENCY_Two     = 2,    // Two wait states, if 48 MHz < SYSCLK ≤72 MHz
+} FLASH_ACR_LATENCY_Enum;
+
+// FPEC key register
+#define FLASH_KEYR_KEY1       (uint32_t)(0x45670123UL)  // Unlocking KEY1
+#define FLASH_KEYR_KEY2       (uint32_t)(0xCDEF89ABUL)  // Unlocking KEY2
+
+// Flash status register
+#define FLASH_SR_EOP          (uint32_t)(1<<5)          // End of operation
+#define FLASH_SR_WRPRTERR     (uint32_t)(1<<4)          // Write protection error
+#define FLASH_SR_PGERR        (uint32_t)(1<<2)          // Programming error
+#define FLASH_SR_BSY          (uint32_t)(1<<0)          // Busy
+
+// Flash control register
+#define FLASH_CR_EOPIE        (uint32_t)(1<<12)         // End of operation interrupt enable
+#define FLASH_CR_ERRIE        (uint32_t)(1<<10)         // Error interrupt enable
+#define FLASH_CR_OPTWRE       (uint32_t)(1<<9)          // Option bytes write enable
+#define FLASH_CR_LOCK         (uint32_t)(1<<7)          // Lock
+#define FLASH_CR_STRT         (uint32_t)(1<<6)          // Start
+#define FLASH_CR_OPTER        (uint32_t)(1<<5)          // Option byte erase
+#define FLASH_CR_OPTPG        (uint32_t)(1<<4)          // Option byte programming
+#define FLASH_CR_MER          (uint32_t)(1<<2)          // Mass erase
+#define FLASH_CR_PER          (uint32_t)(1<<1)          // Page erase
+#define FLASH_CR_PG           (uint32_t)(1<<0)          // Programming
+
+// Option byte register
+#define FLASH_OBR_DATA1       (uint32_t)(0xFF<<18)      // Data 1
+#define FLASH_OBR_DATA0       (uint32_t)(0xFF<<10)      // Data 0
+#define FLASH_OBR_nRST_STDBY  (uint32_t)(1<<4)
+#define FLASH_OBR_nRST_STOP   (uint32_t)(1<<3)        
+#define FLASH_OBR_WDG_SW      (uint32_t)(1<<2)
+#define FLASH_OBR_RDPRT       (uint32_t)(1<<1)          // Read protection
+#define FLASH_OBR_OPTERR      (uint32_t)(1<<0)          // Option byte error
+
+#define FLASH_OB
+
+
 
 /* ToDo: add here your device specific peripheral access structure typedefs
          including bit definitions for Pos/Msk macros
@@ -228,13 +296,16 @@ Flash memory allocation for STM32F103xx medium density perfomance line devices
 #define __FLASH_MEMORY_PAGE_VALID(n)              ((uint8_t)(n) < __FLASH_MEMORY_PAGE_COUNT)
 
 #define FLASH_MEMORY_PAGE(n)                      (PAGE_VALID(n) ? \
-                                                      (volatile uint32_t*)(FLASH_MEMORY_BASE + n * __FLASH_MEMORY_PAGE_SIZE)) : \
-                                                      (volatile uint32_t*)0
+                                                      (volatile uint32_t*)(FLASH_MEMORY_BASE + n * __FLASH_MEMORY_PAGE_SIZE) : \
+                                                      (volatile uint32_t*)-1)
+
+#define FLASH_OPTION_BYTE(n)                      ((uint8_t)(n) < 16 ? OPTION_BASE + n : -1)
 
 /* ========================================================================= */
 /* ============             Peripheral declaration              ============ */
 /* ========================================================================= */
 
+#define FLASH             ((FLASH_TypeDef *) FLASH_BASE)
 
 /* ToDo: Add here your device peripherals pointer definitions
          following is an example for timer */
