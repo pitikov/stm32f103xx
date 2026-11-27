@@ -167,7 +167,7 @@ typedef struct {
   __OM  uint32_t    OPTKEYR;  // Flash OPTKEY register
   __IOM uint32_t    SR;       // Flash status register
   __IOM uint32_t    CR;       // Flash control register
-  __IM  uint32_t    __unused;
+  __IM  uint32_t    _unused;
   __OM  uint32_t    AR;       // Flash address register
   __IOM uint32_t    OBR;      // Option byte register
   __IM  uint32_t    WRPR;     // Write protection register
