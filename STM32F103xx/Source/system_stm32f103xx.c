@@ -77,11 +77,46 @@ uint32_t SystemCoreClock = SYSTEM_CLOCK;  /* System Clock Frequency (Core Clock)
  *---------------------------------------------------------------------------*/
 void SystemCoreClockUpdate (void)
 {
-/* ToDo: Add code to calculate the system frequency based upon the current
-         register settings.
-         This function can be used to retrieve the system core clock frequeny
-         after user changed register sittings. */
-  SystemCoreClock = SYSTEM_CLOCK;
+  switch (BITS_GET(RCC->CFGR, RCC_CFGR_SWS)) 
+  {
+  case RCC_CFGR_SWS_HSE:
+    SystemCoreClock = HSI_VALUE;
+    break;
+  case RCC_CFGR_SWS_HSI:
+    SystemCoreClock = HSI_VALUE;
+    break;
+  case RCC_CFGR_SWS_PLL:
+    uint32_t pllmull = 0;
+    switch (BITS_GET(RCC->CFGR, RCC_CFGR_PLLMUL))
+    {
+    case RCC_CFGR_PLLMUL_x2: pllmull = 2; break;
+    case RCC_CFGR_PLLMUL_x3: pllmull = 3; break;
+    case RCC_CFGR_PLLMUL_x4: pllmull = 4; break;
+    case RCC_CFGR_PLLMUL_x5: pllmull = 5; break;
+    case RCC_CFGR_PLLMUL_x6: pllmull = 6; break;
+    case RCC_CFGR_PLLMUL_x7: pllmull = 7; break;
+    case RCC_CFGR_PLLMUL_x8: pllmull = 8; break;
+    case RCC_CFGR_PLLMUL_x9: pllmull = 9; break;
+    case RCC_CFGR_PLLMUL_x10: pllmull = 10; break;
+    case RCC_CFGR_PLLMUL_x11: pllmull = 11; break;
+    case RCC_CFGR_PLLMUL_x12: pllmull = 12; break;
+    case RCC_CFGR_PLLMUL_x13: pllmull = 13; break;
+    case RCC_CFGR_PLLMUL_x14: pllmull = 14; break;
+    case RCC_CFGR_PLLMUL_x15: pllmull = 15; break;
+    case RCC_CFGR_PLLMUL_x16: pllmull = 16; break;
+    case RCC_CFGR_PLLMUL_x16_: pllmull = 16; break;
+    }
+    if (BITS_GET(RCC->CFGR, RCC_CFGR_PLLSRC) == RCC_CFGR_PLLSRC_HSI_2) {
+      SystemCoreClock = HSI_VALUE / 2 * pllmull; 
+    } else {
+      if (BITS_GET(RCC->CFGR, RCC_CFGR_PLLXTPRE) == RCC_CFGR_PLLXTPRE_HSE_2) {
+        SystemCoreClock = HSE_VALUE / 2 * pllmull;
+      } else {
+        SystemCoreClock = HSE_VALUE * pllmull;
+      }
+    }
+    break;
+  }
 }
 
 
@@ -104,6 +139,7 @@ void SystemInit (void)
 
 extern void main(void);
 void main_venir(void) {
+  SystemCoreClockUpdate();
   main();
 
   // Dead loop tarp after main execute
