@@ -22,6 +22,16 @@
             ],
             "command": "openocd -f interface/jlink.cfg -c 'transport select jtag' -f target/stm32f1x.cfg",
             "problemMatcher": []
-        }
+        },
+        {
+            "label": "OpenOCD + ST-Link",
+            "type": "shell",
+            "group": "none",
+            "dependsOn": [
+                "make"
+            ],
+            "command": "openocd -f interface/stlink-dap.cfg -f target/stm32f1x.cfg",
+            "problemMatcher": []
+        },
     ]
 }
