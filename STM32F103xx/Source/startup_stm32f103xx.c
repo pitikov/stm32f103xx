@@ -58,10 +58,51 @@ void DebugMon_Handler       (void) __attribute__ ((weak, noreturn, alias("Defaul
 void PendSV_Handler         (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
 void SysTick_Handler        (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
 
-/* ToDo: Add your device specific interrupt handler */
-// void <DeviceInterrupt first>_Handler     (void) __attribute__ ((weak, alias("Default_Handler")));
-// ...
-// void <DeviceInterrupt last>_Handler      (void) __attribute__ ((weak, alias("Default_Handler")));
+/* STM32F103C8 specific interrupt handler */
+
+void WWDG_IRQHandler          (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void PVD_IRQHandler           (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void TAMPER_IRQHandler        (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void RTC_IRQHandler           (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void FLASH_IRQHandler         (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void RCC_IRQHandler           (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void EXTI0_IRQHandler         (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void EXTI1_IRQHandler         (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void EXTI2_IRQHandler         (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void EXTI3_IRQHandler         (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void EXTI4_IRQHandler         (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void DMA1_Channel1_IRQHandler (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void DMA1_Channel2_IRQHandler (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void DMA1_Channel3_IRQHandler (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void DMA1_Channel4_IRQHandler (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void DMA1_Channel5_IRQHandler (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void DMA1_Channel6_IRQHandler (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void DMA1_Channel7_IRQHandler (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void ADC1_2_IRQHandler        (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void USB_HP_CAN_TX_IRQHandler (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void USB_LP_CAN_RX0_IRQHandler(void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void CAN_RX1_IRQHandler       (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void CAN_SCE_IRQHandler       (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void EXTI9_5_IRQHandler       (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void TIM1_BRK_IRQHandler      (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void TIM1_UP_IRQHandler       (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void TIM1_TRG_COM_IRQHandler  (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void TIM1_CC_IRQHandler       (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void TIM2_IRQHandler          (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void TIM3_IRQHandler          (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void TIM4_IRQHandler          (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void I2C1_EV_IRQHandler       (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void I2C1_ER_IRQHandler       (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void I2C2_EV_IRQHandler       (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void I2C2_ER_IRQHandler       (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void SPI1_IRQHandler          (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void SPI2_IRQHandler          (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void USART1_IRQHandler        (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void USART2_IRQHandler        (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void USART3_IRQHandler        (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void EXTI15_10_IRQHandler     (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void RTCAlarm_IRQHandler      (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
+void USBWakeup_IRQHandler     (void) __attribute__ ((weak, noreturn, alias("Default_Handler")));
 
 
 /*----------------------------------------------------------------------------
@@ -73,17 +114,8 @@ void SysTick_Handler        (void) __attribute__ ((weak, noreturn, alias("Defaul
 #pragma GCC diagnostic ignored "-Wpedantic"
 #endif
 
-#ifdef PERFOMANCE_LINE
-#if PERFOMANCE_LINE == CONNECTIVITY_LINE
-#define __VTABLE_SIZE 84
-#else
 #define  __VTABLE_SIZE 76
-#endif // PERFOMACE_LINE select
-#else
-#define __VTABLE_SIZE=16
-#endif
 
-/* ToDo: Add Cortex exception vectors according the used Cortex-Core */
 extern const VECTOR_TABLE_Type __VECTOR_TABLE[__VTABLE_SIZE];
        const VECTOR_TABLE_Type __VECTOR_TABLE[__VTABLE_SIZE] __VECTOR_TABLE_ATTRIBUTE = {
   (VECTOR_TABLE_Type)(&__INITIAL_SP),  /*     Initial Stack Pointer */
@@ -103,12 +135,66 @@ extern const VECTOR_TABLE_Type __VECTOR_TABLE[__VTABLE_SIZE];
   PendSV_Handler,                      /*  -2 PendSV Handler */
   SysTick_Handler,                     /*  -1 SysTick Handler */
 
-#ifdef PERFOMANCE_LINE
-#if PERFOMANCE_LINE == CONNECTIVITY_LINE
-#elif PERFOMANCE_LINE == EXTENDED_DENSITY_LINE
-#else
-#endif // PERFOMANCE_LINE select
-#endif // PERFOMANCE_LINE
+  WWDG_IRQHandler,                      /* Window watchdog interrupt Handler */
+  PVD_IRQHandler,                       /* PVD through EXTI Line detection interrupt Handler */
+  TAMPER_IRQHandler,                    /* Tamper interrupt Handler */
+  RTC_IRQHandler,                       /* RTC global interrupt Handler */
+  FLASH_IRQHandler,                     /* Flash global interrupt Handler */
+  RCC_IRQHandler,                       /* RCC global interrupt Handler */
+  EXTI0_IRQHandler,                     /* EXTI Line0 interrupt Handler */
+  EXTI1_IRQHandler,                     /* EXTI Line1 interrupt Handler */
+  EXTI2_IRQHandler,                     /* EXTI Line2 interrupt Handler */
+  EXTI3_IRQHandler,                     /* EXTI Line3 interrupt Handler */
+  EXTI4_IRQHandler,                     /* EXTI Line4 interrupt Handler */
+  DMA1_Channel1_IRQHandler,             /* DMA1 Channel1 global interrupt Handler */
+  DMA1_Channel2_IRQHandler,             /* DMA1 Channel2 global interrupt Handler */
+  DMA1_Channel3_IRQHandler,             /* DMA1 Channel3 global interrupt Handler */
+  DMA1_Channel4_IRQHandler,             /* DMA1 Channel4 global interrupt Handler */
+  DMA1_Channel5_IRQHandler,             /* DMA1 Channel5 global interrupt Handler */
+  DMA1_Channel6_IRQHandler,             /* DMA1 Channel6 global interrupt Handler */
+  DMA1_Channel7_IRQHandler,             /* DMA1 Channel7 global interrupt Handler */
+  ADC1_2_IRQHandler,                    /* ADC1 and ADC2 global interrupt Handler */
+  USB_HP_CAN_TX_IRQHandler,             /* USB High Priority or CAN TX interrupts Handler */
+  USB_LP_CAN_RX0_IRQHandler,            /* USB Low Priority or CAN RX0 interrupts Handler */
+  CAN_RX1_IRQHandler,                   /* CAN RX1 interrupt Handler */
+  CAN_SCE_IRQHandler,                   /* CAN SCE interrupt Handler */
+  EXTI9_5_IRQHandler,                   /* EXTI Line[9:5] interrupts Handler */
+  TIM1_BRK_IRQHandler,                  /* TIM1 Break interrupt Handler */
+  TIM1_UP_IRQHandler,                   /* TIM1 Update interrupt Handler */
+  TIM1_TRG_COM_IRQHandler,              /* TIM1 Trigger and Commutation interrupts Handler */
+  TIM1_CC_IRQHandler,                   /* TIM1 Capture Compare interrupt Handler */
+  TIM2_IRQHandler,                      /* TIM2 global interrupt Handler */
+  TIM3_IRQHandler,                      /* TIM3 global interrupt Handler */
+  TIM4_IRQHandler,                      /* TIM4 global interrupt Handler */
+  I2C1_EV_IRQHandler,                   /* I2C1 event interrupt Handler */
+  I2C1_ER_IRQHandler,                   /* I2C1 error interrupt Handler */
+  I2C2_EV_IRQHandler,                   /* I2C2 event interrupt Handler */
+  I2C2_ER_IRQHandler,                   /* I2C2 error interrupt Handler */
+  SPI1_IRQHandler,                      /* SPI1 global interrupt Handler */
+  SPI2_IRQHandler,                      /* SPI2 global interrupt Handler */
+  USART1_IRQHandler,                    /* USART1 global interrupt Handler */
+  USART2_IRQHandler,                    /* USART2 global interrupt Handler */
+  USART3_IRQHandler,                    /* USART3 global interrupt Handler */
+  EXTI15_10_IRQHandler,                 /* EXTI Line[15:10] interrupts Handler */
+  RTCAlarm_IRQHandler,                  /* RTC alarm through EXTI line interrupt Handler */
+  USBWakeup_IRQHandler,                 /* USB wakeup from suspend through EXTI line interrupt Handler */
+  0,                                    /*     Reserved */
+  0,                                    /*     Reserved */
+  0,                                    /*     Reserved */
+  0,                                    /*     Reserved */
+  0,                                    /*     Reserved */
+  0,                                    /*     Reserved */
+  0,                                    /*     Reserved */
+  0,                                    /*     Reserved */
+  0,                                    /*     Reserved */
+  0,                                    /*     Reserved */
+  0,                                    /*     Reserved */
+  0,                                    /*     Reserved */
+  0,                                    /*     Reserved */
+  0,                                    /*     Reserved */
+  0,                                    /*     Reserved */
+  0,                                    /*     Reserved */
+  0,                                    /*     Reserved */
 };
 
 #if defined ( __GNUC__ )

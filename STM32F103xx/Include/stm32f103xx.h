@@ -39,7 +39,6 @@ typedef enum IRQn
 {
 /* ================     Cortex-M Core Exception Numbers     ================ */
 
-/* ToDo: add Cortex exception numbers according the used Cortex-Core */
   Reset_IRQn             = -15,  /*  1 Reset Vector
                                        invoked on Power up and warm reset */
   NonMaskableInt_IRQn    = -14,  /*  2 Non maskable Interrupt
@@ -59,12 +58,49 @@ typedef enum IRQn
   SysTick_IRQn           =  -1,  /* 15 System Tick Timer */
 
 /* ================        STM32F103xx Interrupt Numbers       ================ */
-/* ToDo: Add here your device specific interrupt numbers
-         according the interrupt handlers defined in startup_Device.s
-         eg.: Interrupt for Timer#1       TIM1_IRQHandler   ->   TIM1_IRQn */
-  // <DeviceInterrupt first>_IRQn = 0,    /* first Device Interrupt*/
-  // ...
-  // <DeviceInterrupt last>_IRQn  = n     /* last Device Interrupt */
+  WWDG_IRQn              =   0,  /* Window watchdog interrupt */
+  PVD_IRQn               =   1,  /* PVD through EXTI Line detection interrupt */
+  TAMPER_IRQn            =   2,  /* Tamper interrupt */
+  RTC_IRQn               =   3,  /* RTC global interrupt */
+  FLASH_IRQn             =   4,  /* Flash global interrupt */
+  RCC_IRQn               =   5,  /* RCC global interrupt */
+  EXTI0_IRQn             =   6,  /* EXTI Line0 interrupt */
+  EXTI1_IRQn             =   7,  /* EXTI Line1 interrupt */
+  EXTI2_IRQn             =   8,  /* EXTI Line2 interrupt */
+  EXTI3_IRQn             =   9,  /* EXTI Line3 interrupt */
+  EXTI4_IRQn             =  10,  /* EXTI Line4 interrupt */
+  DMA1_Channel1_IRQn     =  11,  /* DMA1 Channel1 global interrupt */
+  DMA1_Channel2_IRQn     =  12,  /* DMA1 Channel2 global interrupt */
+  DMA1_Channel3_IRQn     =  13,  /* DMA1 Channel3 global interrupt */
+  DMA1_Channel4_IRQn     =  14,  /* DMA1 Channel4 global interrupt */
+  DMA1_Channel5_IRQn     =  15,  /* DMA1 Channel5 global interrupt */
+  DMA1_Channel6_IRQn     =  16,  /* DMA1 Channel6 global interrupt */
+  DMA1_Channel7_IRQn     =  17,  /* DMA1 Channel7 global interrupt */
+  ADC1_2_IRQn            =  18,  /* ADC1 and ADC2 global interrupt */
+  USB_HP_CAN_TX_IRQn     =  19,  /* USB High Priority or CAN TX interrupts */
+  USB_LP_CAN_RX0_IRQn    =  20,  /* USB Low Priority or CAN RX0 interrupts */
+  CAN_RX1_IRQn           =  21,  /* CAN RX1 interrupt */
+  CAN_SCE_IRQn           =  22,  /* CAN SCE interrupt */
+  EXTI9_5_IRQn           =  23,  /* EXTI Line[9:5] interrupts */
+  TIM1_BRK_IRQn          =  24,  /* TIM1 Break interrupt */
+  TIM1_UP_IRQn           =  25,  /* TIM1 Update interrupt */
+  TIM1_TRG_COM_IRQn      =  26,  /* TIM1 Trigger and Commutation interrupts */
+  TIM1_CC_IRQn           =  27,  /* TIM1 Capture Compare interrupt */
+  TIM2_IRQn              =  28,  /* TIM2 global interrupt */
+  TIM3_IRQn              =  29,  /* TIM3 global interrupt */
+  TIM4_IRQn              =  30,  /* TIM4 global interrupt */
+  I2C1_EV_IRQn           =  31,  /* I2C1 event interrupt */
+  I2C1_ER_IRQn           =  32,  /* I2C1 error interrupt */
+  I2C2_EV_IRQn           =  33,  /* I2C2 event interrupt */
+  I2C2_ER_IRQn           =  34,  /* I2C2 error interrupt */
+  SPI1_IRQn              =  35,  /* SPI1 global interrupt */
+  SPI2_IRQn              =  36,  /* SPI2 global interrupt */
+  USART1_IRQn            =  37,  /* USART1 global interrupt */
+  USART2_IRQn            =  38,  /* USART2 global interrupt */
+  USART3_IRQn            =  39,  /* USART3 global interrupt */
+  EXTI15_10_IRQn         =  40,  /* EXTI Line[15:10] interrupts */
+  RTCAlarm_IRQn          =  41,  /* RTC alarm through EXTI line interrupt */
+  USBWakeup_IRQn         =  42,  /* USB wakeup from suspend through EXTI line interrupt */
 } IRQn_Type;
 
 

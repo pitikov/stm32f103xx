@@ -30,7 +30,5 @@ HSE_VALUE			:= 8000000
 # Частота LSE осцилятора (Стандарт 32.768 KHZ) Если используем другой - поправь
 LSE_VALUE			:= 32768
 
-PERFOMANCE_LINE		:= MIDDLE_DENSITY
-
 # Подлючаем файл правил сборки проекта
 include project.mk
