@@ -66,9 +66,6 @@ extern const VECTOR_TABLE_Type __VECTOR_TABLE[496];
 /*---------------------------------------------------------------------------
   System Core Clock Variable
  *---------------------------------------------------------------------------*/
-/* ToDo: Initialize SystemCoreClock with the system core clock frequency value
-         achieved after system intitialization.
-         This means system core clock frequency after call to SystemInit() */
 uint32_t SystemCoreClock = SYSTEM_CLOCK;  /* System Clock Frequency (Core Clock)*/
 
 
@@ -77,11 +74,46 @@ uint32_t SystemCoreClock = SYSTEM_CLOCK;  /* System Clock Frequency (Core Clock)
  *---------------------------------------------------------------------------*/
 void SystemCoreClockUpdate (void)
 {
-/* ToDo: Add code to calculate the system frequency based upon the current
-         register settings.
-         This function can be used to retrieve the system core clock frequeny
-         after user changed register sittings. */
-  SystemCoreClock = SYSTEM_CLOCK;
+  switch (BITS_GET(RCC->CFGR, RCC_CFGR_SWS)) 
+  {
+  case RCC_CFGR_SWS_HSE:
+    SystemCoreClock = HSI_VALUE;
+    break;
+  case RCC_CFGR_SWS_HSI:
+    SystemCoreClock = HSI_VALUE;
+    break;
+  case RCC_CFGR_SWS_PLL:
+    uint32_t pllmull = 0;
+    switch (BITS_GET(RCC->CFGR, RCC_CFGR_PLLMUL))
+    {
+    case RCC_CFGR_PLLMUL_x2: pllmull = 2; break;
+    case RCC_CFGR_PLLMUL_x3: pllmull = 3; break;
+    case RCC_CFGR_PLLMUL_x4: pllmull = 4; break;
+    case RCC_CFGR_PLLMUL_x5: pllmull = 5; break;
+    case RCC_CFGR_PLLMUL_x6: pllmull = 6; break;
+    case RCC_CFGR_PLLMUL_x7: pllmull = 7; break;
+    case RCC_CFGR_PLLMUL_x8: pllmull = 8; break;
+    case RCC_CFGR_PLLMUL_x9: pllmull = 9; break;
+    case RCC_CFGR_PLLMUL_x10: pllmull = 10; break;
+    case RCC_CFGR_PLLMUL_x11: pllmull = 11; break;
+    case RCC_CFGR_PLLMUL_x12: pllmull = 12; break;
+    case RCC_CFGR_PLLMUL_x13: pllmull = 13; break;
+    case RCC_CFGR_PLLMUL_x14: pllmull = 14; break;
+    case RCC_CFGR_PLLMUL_x15: pllmull = 15; break;
+    case RCC_CFGR_PLLMUL_x16: pllmull = 16; break;
+    case RCC_CFGR_PLLMUL_x16_: pllmull = 16; break;
+    }
+    if (BITS_GET(RCC->CFGR, RCC_CFGR_PLLSRC) == RCC_CFGR_PLLSRC_HSI_2) {
+      SystemCoreClock = HSI_VALUE / 2 * pllmull; 
+    } else {
+      if (BITS_GET(RCC->CFGR, RCC_CFGR_PLLXTPRE) == RCC_CFGR_PLLXTPRE_HSE_2) {
+        SystemCoreClock = HSE_VALUE / 2 * pllmull;
+      } else {
+        SystemCoreClock = HSE_VALUE * pllmull;
+      }
+    }
+    break;
+  }
 }
 
 
@@ -90,9 +122,17 @@ void SystemCoreClockUpdate (void)
  *---------------------------------------------------------------------------*/
 void SystemInit (void)
 {
-/* ToDo: Add code to initialize the system.
-         Do not use global variables because this function is called before
-         reaching pre-main. RW section maybe overwritten afterwards. */
+  REG_SET(RCC->CFGR, RCC_CFGR_USBPRE_PLL_1p5 | RCC_CFGR_PLLMUL_x9 | RCC_CFGR_PLLXTPRE_HSE | RCC_CFGR_PLLSRC_HSE | RCC_CFGR_ADCPRE_PCLK2_8 | RCC_CFGR_HPRE_SYSCLK | RCC_CFGR_PPRE1_HCLK_2 | RCC_CFGR_PPRE2_HCLK | RCC_CFGR_SW_HSI);
+  BITS_MODIFY(RCC->CR, RCC_CR_PLLON | RCC_CR_HSEON, RCC_CR_HSEON);
+  while (!BITS_GET(RCC->CR, RCC_CR_HSERDY));
+  BITS_SET(RCC->CR, RCC_CR_PLLON);
+  while (!BITS_GET(RCC->CR, RCC_CR_PLLRDY));
+  BITS_MODIFY(FLASH->ACR, FLASH_ACR_LATENCY, FLASH_ACR_LATENCY_Two);
+  __DSB();
+  __ISB();
+  BITS_MODIFY(RCC->CFGR, RCC_CFGR_SW, RCC_CFGR_SW_PLL);
+  while(BITS_GET(RCC->CFGR, RCC_CFGR_SWS)!= RCC_CFGR_SWS_PLL);
+  
 
 /* ToDo: Initialize VTOR if available */
 #if defined (__VTOR_PRESENT) && (__VTOR_PRESENT == 1U)
@@ -104,6 +144,7 @@ void SystemInit (void)
 
 extern void main(void);
 void main_venir(void) {
+  SystemCoreClockUpdate();
   main();
 
   // Dead loop tarp after main execute
