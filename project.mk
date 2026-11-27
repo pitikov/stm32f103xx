@@ -160,7 +160,7 @@ LIBS						+= $(foreach l,$(LIBLIST),-l$l)
 LIBS						+= -Wl,--end-group
 
 # -------------------- Конфигурирование системы отладки ----------------
-ifdef ($(DEBUG_TRANSPORT))
+ifdef DEBUG_TRANSPORT
 	SELECT_TRANSPORT =  -c 'transport select $(DEBUG_TRANSPORT)'
 endif
 

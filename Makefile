@@ -18,11 +18,11 @@ STACK_SIZE			:= 1024
 DEBUG_BUILD			?= true
 
 # jlink, stlink, stlink-v1, stlink-v2, stlink-v2-1, stlink-dap, ulink, ... (см. список поддерживаемых интерфейсов твоей версии openocd)
-DEBUG_INTERFACE		?= stlink
+DEBUG_INTERFACE		?= stlink-v2-1
 
 # Установите тип транспортного протокола отладчика, если требуется
 # Допускаются значения swd,	dapdirect_swd, dapdirect_jtag, swim, hla_jtag, hla_swd, jtag
-DEBUG_TRANSPORT		?= swd
+DEBUG_TRANSPORT		?= hla_jtag
 
 # Частота HSE осцилятора (Стандарт 8 MHz) Если используем другой - поправь
 HSE_VALUE			:= 8000000
