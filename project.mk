@@ -227,9 +227,13 @@ gdb: $(TARGET_ELF)
 .SILENT: clean
 .SILENT: $(TARGET_BIN)
 .SILENT: $(TARGET_OBJDUMP)
+.SILENT: $(OBJECTS)
+.SILENT: $(TARGET_ELF)
 
 # Экранирование (обязательное исполнение) целей сборки
 .PHONY: clean
 .PHONY: $(TARGET_ELF)
 .PHONY: $(TARGET_BIN)
 .PHONY: $(TARGET_OBJDUMP)
+.PHONY: gdb
+.PHONY: openocd
