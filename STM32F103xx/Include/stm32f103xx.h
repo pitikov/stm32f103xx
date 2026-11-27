@@ -223,8 +223,241 @@ typedef enum {
 #define FLASH_OBR_RDPRT       (uint32_t)(1<<1)          // Read protection
 #define FLASH_OBR_OPTERR      (uint32_t)(1<<0)          // Option byte error
 
-#define FLASH_OB
+/*---------------------------------------------------------------------------
+Flash memory registers
+----------------------------------------------------------------------------*/
+typedef struct {
+   __IOM  uint32_t  CR;       // Clock control register (RCC_CR)
+   __IOM  uint32_t  CFGR;     // Clock configuration register (RCC_CFGR)
+   __IOM  uint32_t  CIR;      // Clock interrupt register (RCC_CIR)
+   __IOM  uint32_t  APB2RSTR; // APB2 peripheral reset register (RCC_APB2RSTR)
+   __IOM  uint32_t  APB1RSTR; // APB1 peripheral reset register (RCC_APB1RSTR)
+   __IOM  uint32_t  AHBENR;   // AHB peripheral clock enable register (RCC_AHBENR)
+   __IOM  uint32_t  APB2ENR;  // APB2 peripheral clock enable register (RCC_APB2ENR)
+   __IOM  uint32_t  APB1ENR;  // APB1 peripheral clock enable register (RCC_APB1ENR)
+   __IOM  uint32_t  BDCR;     // Backup domain control register (RCC_BDCR)
+   __IOM  uint32_t  CSR;      // Control/status register (RCC_CSR)
+} RCC_TypeDef;
 
+// Clock control register (RCC_CR)
+#define RCC_CR_PLLRDY           (uint32_t)(1<<25)   // PLL clock ready flag
+#define RCC_CR_PLLON            (uint32_t)(1<<24)   // PLL enable
+#define RCC_CR_CSSON            (uint32_t)(1<<19)   // Clock security system enable
+#define RCC_CR_HSEBYP           (uint32_t)(1<<18)   // External high-speed clock bypass
+#define RCC_CR_HSERDY           (uint32_t)(1<<17)   // External high-speed clock ready flag
+#define RCC_CR_HSEON            (uint32_t)(1<<16)   // HSE clock enable
+#define RCC_CR_HSICAL           (uint32_t)(0xFF<<8) // Internal high-speed clock calibration
+#define RCC_CR_HSITRIM          (uint32_t)(0x1F<<3) // Internal high-speed clock trimming
+#define RCC_CR_HSIRDY           (uint32_t)(1<<1)    // Internal high-speed clock ready flag
+#define RCC_CR_HSION            (uint32_t)(1<<0)    // Internal high-speed clock enable
+
+// Clock configuration register (RCC_CFGR)
+#define RCC_CFGR_MCO            (uint32_t)(7<<24)       // Microcontroller clock output
+#define RCC_CFGR_USBPRE         (uint32_t)(1<<22)       // USB prescaler
+#define RCC_CFGR_PLLMUL         (uint32_t)(0xF<<18)     // PLL multiplication factor
+#define RCC_CFGR_PLLXTPRE       (uint32_t)(1<<17)       // HSE divider for PLL entry
+#define RCC_CFGR_PLLSRC         (uint32_t)(1<<16)       // PLL entry clock source
+#define RCC_CFGR_ADCPRE         (uint32_t)(3<<14)       // ADC prescaler
+#define RCC_CFGR_PPRE2          (uint32_t)(7<<11)       // APB high-speed prescaler (APB2)
+#define RCC_CFGR_PPRE1          (uint32_t)(7<<8)        // APB low-speed prescaler (APB1)
+#define RCC_CFGR_HPRE           (uint32_t)(0xF<<4)      // AHB prescaler
+#define RCC_CFGR_SWS            (uint32_t)(3<<2)        // System clock switch status
+#define RCC_CFGR_SW             (uint32_t)(3<<0)        // System clock switch
+
+enum {
+  RCC_CFGR_MCO_NoClock = 0,     // No clock
+  RCC_CFGR_MCO_SYSCLK = 4<<24,  // System clock (SYSCLK) selected
+  RCC_CFGR_MCO_HSI = 5<<24,     // HSI clock selected
+  RCC_CFGR_MCO_HSE = 6<<24,     // HSE clock selected
+  RCC_CFGR_MCO_PLL_2 = 7<<24,   // PLL clock divided by 2 selected
+};
+
+enum {
+  RCC_CFGR_USBPRE_PLL_1p5 = 0,  // PLL clock is divided by 1.5
+  RCC_CFGR_USBPRE_PLL = 1<<22,  // PLL clock is not divided 
+};
+
+enum {
+  RCC_CFGR_PLLMUL_x2 = 0,       // PLL input clock x 2
+  RCC_CFGR_PLLMUL_x3 = 1<<18,   // PLL input clock x 3
+  RCC_CFGR_PLLMUL_x4 = 2<<18,   // PLL input clock x 4
+  RCC_CFGR_PLLMUL_x5 = 3<<18,   // PLL input clock x 5
+  RCC_CFGR_PLLMUL_x6 = 4<<18,   // PLL input clock x 6
+  RCC_CFGR_PLLMUL_x7 = 5<<18,   // PLL input clock x 7
+  RCC_CFGR_PLLMUL_x8 = 6<<18,   // PLL input clock x 8
+  RCC_CFGR_PLLMUL_x9 = 7<<18,   // PLL input clock x 9
+  RCC_CFGR_PLLMUL_x10 = 8<<18,  // PLL input clock x 10
+  RCC_CFGR_PLLMUL_x11 = 9<<18,  // PLL input clock x 11
+  RCC_CFGR_PLLMUL_x12 = 10<<18, // PLL input clock x 12
+  RCC_CFGR_PLLMUL_x13 = 11<<18, // PLL input clock x 13
+  RCC_CFGR_PLLMUL_x14 = 12<<18, // PLL input clock x 14
+  RCC_CFGR_PLLMUL_x15 = 13<<18, // PLL input clock x 15
+  RCC_CFGR_PLLMUL_x16 = 14<<18, // PLL input clock x 16
+  RCC_CFGR_PLLMUL_x16_= 15<<18, // PLL input clock x 16
+};
+
+enum {
+  RCC_CFGR_PLLXTPRE_HSE = 0,        // HSE clock not divided
+  RCC_CFGR_PLLXTPRE_HSE_2 = 1<<17,  // HSE clock divided by 2
+};
+
+enum {
+  RCC_CFGR_PLLSRC_HSI_2 = 0,        // HSI oscillator clock / 2 selected as PLL input clock
+  RCC_CFGR_PLLSRC_HSE = 1<<16,      // HSE oscillator clock selected as PLL input clock
+};
+
+enum {
+  RCC_CFGR_ADCPRE_PCLK2_2 = 0,      // PCLK2 divided by 2
+  RCC_CFGR_ADCPRE_PCLK2_4 = 1<<14,  // PCLK2 divided by 4
+  RCC_CFGR_ADCPRE_PCLK2_6 = 2<<14,  // PCLK2 divided by 6
+  RCC_CFGR_ADCPRE_PCLK2_8 = 3<<14,  // PCLK2 divided by 8
+};
+
+enum {
+  RCC_CFGR_PPRE2_HCLK = 0,          // HCLK not divided
+  RCC_CFGR_PPRE2_HCLK_2 = 4<<11,    // HCLK divided by 2
+  RCC_CFGR_PPRE2_HCLK_4 = 5<<11,    // HCLK divided by 4
+  RCC_CFGR_PPRE2_HCLK_8 = 6<<11,    // HCLK divided by 8
+  RCC_CFGR_PPRE2_HCLK_16 = 7<<11,   // HCLK divided by 16
+};
+
+enum {
+  RCC_CFGR_PPRE1_HCLK = 0,          // HCLK not divided
+  RCC_CFGR_PPRE1_HCLK_2 = 4<<8,     // HCLK divided by 2
+  RCC_CFGR_PPRE1_HCLK_4 = 5<<8,     // HCLK divided by 4
+  RCC_CFGR_PPRE1_HCLK_8 = 6<<8,     // HCLK divided by 8
+  RCC_CFGR_PPRE1_HCLK_16 = 7<<8,    // HCLK divided by 16
+};
+
+enum {
+  RCC_CFGR_HPRE_SYSCLK = 0,         // SYSCLK not divided
+  RCC_CFGR_HPRE_SYSCLK_2 = 8<<4,    // SYSCLK divided by 2
+  RCC_CFGR_HPRE_SYSCLK_4 = 9<<4,    // SYSCLK divided by 4
+  RCC_CFGR_HPRE_SYSCLK_8 = 10<<4,   // SYSCLK divided by 8
+  RCC_CFGR_HPRE_SYSCLK_16 = 11<<4,  // SYSCLK divided by 16
+  RCC_CFGR_HPRE_SYSCLK_64 = 12<<4,  // SYSCLK divided by 64
+  RCC_CFGR_HPRE_SYSCLK_128 = 13<<4, // SYSCLK divided by 128
+  RCC_CFGR_HPRE_SYSCLK_256 = 14<<4, // SYSCLK divided by 256
+  RCC_CFGR_HPRE_SYSCLK_512 = 15<<4, // SYSCLK divided by 512
+};
+
+enum {
+  RCC_CFGR_SWS_HSI = 0,             // HSI oscillator used as system clock
+  RCC_CFGR_SWS_HSE = 1<<2,          // HSE oscillator used as system clock
+  RCC_CFGR_SWS_PLL = 2<<2,          // PLL used as system clock
+};
+
+enum {
+  RCC_CFGR_SW_HSI = 0,              // HSI selected as system clock
+  RCC_CFGR_SW_HSE = 1,              // HSE selected as system clock
+  RCC_CFGR_SW_PLL = 2,              // PLL selected as system clock
+}; 
+
+// Clock interrupt register (RCC_CIR)
+#define RCC_CIR_CSSC        (uint32_t)(1<<23) // Clock security system interrupt clear
+#define RCC_CIR_PLLRDYC     (uint32_t)(1<<20) // PLL ready interrupt clear
+#define RCC_CIR_HSERDYC     (uint32_t)(1<<19) // HSE ready interrupt clear
+#define RCC_CIR_HSIRDYC     (uint32_t)(1<<18) // HSI ready interrupt clear
+#define RCC_CIR_LSERDYC     (uint32_t)(1<<17) // LSE ready interrupt clear
+#define RCC_CIR_LSIRDYC     (uint32_t)(1<<16) // LSI ready interrupt clear
+#define RCC_CIR_PLLRDYIE    (uint32_t)(1<<12) // PLL ready interrupt enable
+#define RCC_CIR_HSERDYIE    (uint32_t)(1<<11) // HSE ready interrupt enable
+#define RCC_CIR_HSIRDYIE    (uint32_t)(1<<10) // HSI ready interrupt enable
+#define RCC_CIR_LSERDYIE    (uint32_t)(1<<9)  // LSE ready interrupt enable
+#define RCC_CIR_LSIRDYIE    (uint32_t)(1<<8)  // LSI ready interrupt enable
+#define RCC_CIR_CSSF        (uint32_t)(1<<7)  // Clock security system interrupt flag
+#define RCC_CIR_PLLRDYF     (uint32_t)(1<<4)  // PLL ready interrupt flag
+#define RCC_CIR_HSERDYF     (uint32_t)(1<<3)  // HSE ready interrupt flag
+#define RCC_CIR_HSIRDYF     (uint32_t)(1<<2)  // HSI ready interrupt flag
+#define RCC_CIR_LSERDYF     (uint32_t)(1<<1)  // LSE ready interrupt flag
+#define RCC_CIR_LSIRDYF     (uint32_t)(1<<0)  // LSI ready interrupt flag
+
+// APB2 peripheral reset register (RCC_APB2RSTR)
+#define RCC_APB2RSTR_USART1RST  (uint32_t)(1<<14) // USART1 reset
+#define RCC_APB2RSTR_SPI1RST    (uint32_t)(1<<12) // SPI1 reset
+#define RCC_APB2RSTR_TIM1RST    (uint32_t)(1<<11) // TIM1 timer reset
+#define RCC_APB2RSTR_ADC2RST    (uint32_t)(1<<10) // ADC 2 interface reset
+#define RCC_APB2RSTR_ADC1RST    (uint32_t)(1<<9)  // ADC 1 interface reset
+#define RCC_APB2RSTR_IOPERST    (uint32_t)(1<<6)  // IO port E reset
+#define RCC_APB2RSTR_IOPDRST    (uint32_t)(1<<5)  // IO port D reset
+#define RCC_APB2RSTR_IOPCRST    (uint32_t)(1<<4)  // IO port C reset
+#define RCC_APB2RSTR_IOPBRST    (uint32_t)(1<<3)  // IO port B reset
+#define RCC_APB2RSTR_IOPARST    (uint32_t)(1<<2)  // IO port A reset
+#define RCC_APB2RSTR_AFIORTT    (uint32_t)(1<<0)  // Alternate function IO reset
+
+// APB1 peripheral reset register (RCC_APB1RSTR)
+#define RCC_APB1RSTR_PWRRST     (uint32_t)(1<<28) // Power interface reset
+#define RCC_APB1RSTR_BKPRST     (uint32_t)(1<<27) // Backup interface reset
+#define RCC_APB1RSTR_CANRST     (uint32_t)(1<<25) // CAN reset
+#define RCC_APB1RSTR_USBRST     (uint32_t)(1<<23) // USB reset
+#define RCC_APB1RSTR_I2C2RST    (uint32_t)(1<<22) // I2C2 reset
+#define RCC_APB1RSTR_I2C1RST    (uint32_t)(1<<21) // I2C1 reset
+#define RCC_APB1RSTR_USART3RST  (uint32_t)(1<<18) // USART3 reset
+#define RCC_APB1RSTR_USART2RST  (uint32_t)(1<<17) // USART2 reset
+#define RCC_APB1RSTR_SPI2RST    (uint32_t)(1<<14) // SPI2 reset
+#define RCC_APB1RSTR_WWDGRST    (uint32_t)(1<<11) // Window watchdog reset
+#define RCC_APB1RSTR_TIM4RST    (uint32_t)(1<<2)  // TIM4 timer reset
+#define RCC_APB1RSTR_TIM3RST    (uint32_t)(1<<1)  // TIM3 timer reset
+#define RCC_APB1RSTR_TIM2RST    (uint32_t)(1<<0)  // TIM2 timer reset
+
+// AHB peripheral clock enable register (RCC_AHBENR)
+#define RCC_AHBENR_CRCEN        (uint32_t)(1<<6)  // CRC clock enable
+#define RCC_AHBENR_FLITFEN      (uint32_t)(1<<4)  // FLITF clock enable
+#define RCC_AHBENR_DMAEN        (uint32_t)(1<<0)  // DMA clock enable
+
+// APB2 peripheral clock enable register (RCC_APB2ENR)
+#define RCC_APB2ENR_USART1EN    (uint32_t)(1<<14) // USART1 clock enable
+#define RCC_APB2ENR_SPI1EN      (uint32_t)(1<<12) // SPI1 clock enable
+#define RCC_APB2ENR_TIM1EN      (uint32_t)(1<<11) // TIM1 timer clock enable
+#define RCC_APB2ENR_ADC2EN      (uint32_t)(1<<10) // ADC 2 interface clock enable
+#define RCC_APB2ENR_ADC1EN      (uint32_t)(1<<9)  // ADC 1 interface clock enable
+#define RCC_APB2ENR_IOPEEN      (uint32_t)(1<<6)  // IO port E clock enable
+#define RCC_APB2ENR_IOPDEN      (uint32_t)(1<<5)  // IO port D clock enable
+#define RCC_APB2ENR_IOPCEN      (uint32_t)(1<<4)  // IO port C clock enable
+#define RCC_APB2ENR_IOPBEN      (uint32_t)(1<<3)  // IO port B clock enable
+#define RCC_APB2ENR_IOPAEN      (uint32_t)(1<<2)  // IO port A clock enable
+#define RCC_APB2ENR_AFIOEN      (uint32_t)(1<<0)  // Alternate function IO clock enable
+
+// APB1 peripheral clock enable register (RCC_APB1ENR)
+#define RCC_APB1ENR_PWREN        (uint32_t)(1<<28) // Power interface clock enable
+#define RCC_APB1ENR_BKPEN        (uint32_t)(1<<27) // Backup interface clock enable
+#define RCC_APB1ENR_CANEN        (uint32_t)(1<<25) // CAN clock enable
+#define RCC_APB1ENR_USBEN        (uint32_t)(1<<23) // USB clock enable
+#define RCC_APB1ENR_I2C2EN       (uint32_t)(1<<22) // I2C2 clock enable
+#define RCC_APB1ENR_I2C1EN       (uint32_t)(1<<21) // I2C1 clock enable
+#define RCC_APB1ENR_USART3EN     (uint32_t)(1<<18) // USART3 clock enable
+#define RCC_APB1ENR_USART2EN     (uint32_t)(1<<17) // USART2 clock enable
+#define RCC_APB1ENR_SPI2EN       (uint32_t)(1<<14) // SPI2 clock enable
+#define RCC_APB1ENR_WWDGEN       (uint32_t)(1<<11) // Window watchdog clock enable
+#define RCC_APB1ENR_TIM4EN       (uint32_t)(1<<2)  // TIM4 timer clock enable
+#define RCC_APB1ENR_TIM3EN       (uint32_t)(1<<1)  // TIM3 timer clock enable
+#define RCC_APB1ENR_TIM2EN       (uint32_t)(1<<0)  // TIM2 timer clock enable
+
+// Backup domain control register (RCC_BDCR)
+#define RCC_BDCR_BDRST          (uint32_t)(1<<16)  // Backup domain software reset
+#define RCC_BDCR_RTCEN          (uint32_t)(1<<15)  // RTC clock enable
+#define RCC_BDCR_RTCSEL         (uint32_t)(3<<8)   // RTC clock source selection
+#define RCC_BDCR_LSEBYP         (uint32_t)(1<<2)   // External low-speed oscillator bypass
+#define RCC_BDCR_LSERDY         (uint32_t)(1<<1)   // External low-speed oscillator ready
+#define RCC_BDCR_LSEON          (uint32_t)(1<<0)   // External low-speed oscillator enable
+
+enum {
+  RCC_BDCR_RTCSEL_NoClock = 0,    // No clock
+  RCC_BDCR_RTCSEL_LSE = 1<<8,     // LSE oscillator clock used as RTC clock
+  RCC_BDCR_RTCSEL_LSI = 2<<8,     // LSI oscillator clock used as RTC clock
+  RCC_BDCR_RTCSEL_HSE_128 = 3<<8, // HSE oscillator clock divided by 128 used as RTC clock
+};
+
+// Control/status register (RCC_CSR)
+#define RCC_CSR_LPWRRSTF        (uint32_t)(1<<31)   // Low-power reset flag
+#define RCC_CSR_WWDGRSTF        (uint32_t)(1<<30)   // Window watchdog reset flag
+#define RCC_CSR_IWDGRSTF        (uint32_t)(1<<29)   // Independent watchdog reset flag
+#define RCC_CSR_SFTRSTF         (uint32_t)(1<<28)   // Software reset flag
+#define RCC_CSR_PORRSTF         (uint32_t)(1<<27)   // POR/PDR reset flag
+#define RCC_CSR_PINRSTF         (uint32_t)(1<<26)   // PIN reset flag
+#define RCC_CSR_RMVF            (uint32_t)(1<<24)   // Remove reset flag
+#define RCC_CSR_LSIRDY          (uint32_t)(1<<1)    // Internal low-speed oscillator ready
+#define RCC_CSR_LSION           (uint32_t)(1<<0)    // Internal low-speed oscillator enable
 
 
 /* ToDo: add here your device specific peripheral access structure typedefs
@@ -299,7 +532,7 @@ typedef enum {
 #define IWDG_BASE                                 (0x40003000UL)                            /* IWDGT Timer base address */
 #define SPI2_ABSE                                 (0x40003800UL)                            /* SPI2 base address */
 #define USART2_BASE                               (0x40004400UL)                            /* USART2 base address */
-#define USART3_BASE                               (0x40004800UL)                            /* USART2 base address */
+#define USART3_BASE                               (0x40004800UL)                            /* USART3 base address */
 #define I2C1_BASE                                 (0x40005400UL)                            /* I2C1 base address */
 #define I2C2_BASE                                 (0x40005800UL)                            /* I2C2 base address */
 #define USB_BASE                                  (0x40005C00UL)                            /* USB registers base address */
@@ -342,16 +575,13 @@ Flash memory allocation for STM32F103xx medium density perfomance line devices
 /* ========================================================================= */
 
 #define FLASH             ((FLASH_TypeDef *) FLASH_BASE)
+#define RCC               ((RCC_TypeDef *) RCC_BASE)
 
 /* ToDo: Add here your device peripherals pointer definitions
          following is an example for timer */
 
-// #define <DeviceAbbreviation>_TIM0        ((<DeviceAbbreviation>_TMR_TypeDef *) <DeviceAbbreviation>TIM0_BASE)
-// #define <DeviceAbbreviation>_TIM1        ((<DeviceAbbreviation>_TMR_TypeDef *) <DeviceAbbreviation>TIM0_BASE)
-// #define <DeviceAbbreviation>_TIM2        ((<DeviceAbbreviation>_TMR_TypeDef *) <DeviceAbbreviation>TIM0_BASE)
 
-
-/* Макросы манипуляциями битовыси полями регистров */
+/* Макросы манипуляциями битовыми полями регистров */
 
 #define BITS_GET(Reg, Mask)   ((Reg) & (Mask))
 #define BITS_SET(Reg, Mask)   (Reg) |= (Mask)
