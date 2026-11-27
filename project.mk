@@ -159,6 +159,11 @@ LIBS						+= -Wl,--start-group
 LIBS						+= $(foreach l,$(LIBLIST),-l$l)
 LIBS						+= -Wl,--end-group
 
+# -------------------- Конфигурирование системы отладки ----------------
+ifdef ($(DEBUG_TRANSPORT))
+	SELECT_TRANSPORT =  -c 'transport select $(DEBUG_TRANSPORT)'
+endif
+
 # -------------------- Правила сборки ----------------------------------
 
 # Правило сборки default встречается первым, соответстенно оно будет собираться по умолчанию,
@@ -207,6 +212,9 @@ $(OBJ_DIR)/%.o: $(DEVICE_SRC_DIR)/%.c $(OBJ_DIR)
 
 # Подключение файлов зависимостей
 include $(wildcard $(OBJ_DIR)/*.d)
+
+openocd:
+	openocd -f interface/$(DEBUG_INTERFACE).cfg $(SELECT_TRANSPORT) -f target/stm32f1x.cfg
 
 gdb: $(TARGET_ELF)
 	gdb-multiarch -x openocd.gdb --tui $<

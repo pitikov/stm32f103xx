@@ -17,6 +17,13 @@ STACK_SIZE			:= 1024
 # Отладочный режим сборки: true или false
 DEBUG_BUILD			?= true
 
+# jlink, stlink, stlink-v1, stlink-v2, stlink-v2-1, stlink-dap, ulink, ... (см. список поддерживаемых интерфейсов твоей версии openocd)
+DEBUG_INTERFACE		?= stlink
+
+# Установите тип транспортного протокола отладчика, если требуется
+# Допускаются значения swd,	dapdirect_swd, dapdirect_jtag, swim, hla_jtag, hla_swd, jtag
+DEBUG_TRANSPORT		?= swd
+
 # Частота HSE осцилятора (Стандарт 8 MHz) Если используем другой - поправь
 HSE_VALUE			:= 8000000
 
