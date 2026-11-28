@@ -459,6 +459,44 @@ enum {
 #define RCC_CSR_LSIRDY          (uint32_t)(1<<1)    // Internal low-speed oscillator ready
 #define RCC_CSR_LSION           (uint32_t)(1<<0)    // Internal low-speed oscillator enable
 
+/*---------------------------------------------------------------------------
+General-purpose and alternate-function I/Os
+(GPIOs and AFIOs)
+----------------------------------------------------------------------------*/
+typedef struct {
+  __IOM uint32_t  CRL;  // Port configuration register low (GPIOx_CRL)
+  __IOM uint32_t  CRH;  // Port configuration register high (GPIOx_CRH)
+  __IM  uint32_t  IDR;  // Port output data register (GPIOx_ODR)
+  __IOM uint32_t  ODR;  // Port output data register (GPIOx_ODR)
+  __OM  uint32_t  BSRR; // Port bit set/reset register (GPIOx_BSRR)
+  __OM  uint32_t  BRR;  // Port bit reset register (GPIOx_BRR)
+  __IOM uint32_t  LCKR; // Port configuration lock register (GPIOx_LCKR)
+} GPIO_TypeDef;
+
+#define GPIO_SPEED_10MHz  1
+#define GPIO_SPEED_2MHz   2
+#define GPIO_SPEED_50MHz  3
+
+#define GPIO_CRx(n)                      (0xF << ((n & 7) * 4))
+#define _GPIO_OUTPUT(port, mode, speed)   ((mode | speed) << (((int)(port) & 7)*4))
+#define _GPIO_INPUT(port, mode)           (mode << (((int)(port) & 7)*4))
+
+#define GPIO_PP(n, speed)   _GPIO_OUTPUT(n, 0, speed)
+#define GPIO_OD(n, speed)   _GPIO_OUTPUT(n, 4, speed)
+#define GPIO_AFPP(n, speed) _GPIO_OUTPUT(n, 8, speed)
+#define GPIO_AFOD(n, speed) _GPIO_OUTPUT(n, 12, speed)
+#define GPIO_IA(n)          _GPIO_INPUT(n, 0)
+#define GPIO_IF(n)          _GPIO_INPUT(n, 4)
+#define GPIO_IPx(n)         _GPIO_INPUT(n, 8)
+
+#define GPIO_IDR(n)       (1 << (n & 0x0F))
+#define GPIO_ODR(n)       (1 << (n & 0x0F))
+#define GPIO_BSRR_BS(n)   (1 << (n & 0x0F))
+#define GPIO_BSRR_BR(n)   (1 << (0x10 + (n & 0x0F)))
+#define GPIO_BRR(n)       (1 << (n & 0x0F))
+#define GPIO_LCKR_LCK(n)  (1 << (n & 0x0F))
+#define GPIO_LCKR_LCKK    0x00010000UL
+
 
 /* ToDo: add here your device specific peripheral access structure typedefs
          including bit definitions for Pos/Msk macros
@@ -576,6 +614,11 @@ Flash memory allocation for STM32F103xx medium density perfomance line devices
 
 #define FLASH             ((FLASH_TypeDef *) FLASH_BASE)
 #define RCC               ((RCC_TypeDef *) RCC_BASE)
+#define GPIOA             ((GPIO_TypeDef *) GPIOA_BASE)
+#define GPIOB             ((GPIO_TypeDef *) GPIOB_BASE)
+#define GPIOC             ((GPIO_TypeDef *) GPIOC_BASE)
+#define GPIOD             ((GPIO_TypeDef *) GPIOD_BASE)
+#define GPIOE             ((GPIO_TypeDef *) GPIOE_BASE)
 
 /* ToDo: Add here your device peripherals pointer definitions
          following is an example for timer */
