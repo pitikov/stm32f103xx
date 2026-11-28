@@ -219,6 +219,24 @@ openocd:
 gdb: $(TARGET_ELF)
 	gdb-multiarch -x openocd.gdb --tui $<
 
+flash-release:
+	make -C . -e DEBUG_BUILD=false
+	openocd -f interface/$(DEBUG_INTERFACE).cfg $(SELECT_TRANSPORT) -f target/stm32f1x.cfg \
+			-c 'init' \
+			-c 'reset halt' \
+			-c 'flash write_image erase $(TARGET_BIN) 0x08000000' \
+			-c 'flash verify_image $(TARGET_BIN) 0x08000000' \
+			-c 'reset halt' \
+			-c 'exit'
+
+verify: $(TARGET_BIN)
+	openocd -f interface/$(DEBUG_INTERFACE).cfg $(SELECT_TRANSPORT) -f target/stm32f1x.cfg \
+			-c 'init' \
+			-c 'reset halt' \
+			-c 'flash verify_image $(TARGET_BIN) 0x08000000' \
+			-c 'reset halt' \
+			-c 'exit'
+
 # Сокрытие вывод компиляции для целей
 .SILENT: $(BUILD_DIR)
 .SILENT: $(OBJ_DIR)
