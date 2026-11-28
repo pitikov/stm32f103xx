@@ -497,6 +497,52 @@ typedef struct {
 #define GPIO_LCKR_LCK(n)  (1 << (n & 0x0F))
 #define GPIO_LCKR_LCKK    0x00010000UL
 
+typedef struct {
+  __IOM uint32_t  EVCR;       // Event control register (AFIO_EVCR)
+  __IOM uint32_t  MAPR;       // AF remap and debug I/O configuration register (AFIO_MAPR)
+  __IOM uint32_t  EXTICR1;    // External interrupt configuration register 1 (AFIO_EXTICR1)
+  __IOM uint32_t  EXTICR2;    // External interrupt configuration register 2 (AFIO_EXTICR2)
+  __IOM uint32_t  EXTICR3;    // External interrupt configuration register 3 (AFIO_EXTICR3)
+  __IOM uint32_t  EXTICR4;    // External interrupt configuration register 4 (AFIO_EXTICR4)
+  __OM  uint32_t  _unised;    // reserse
+  __IOM uint32_t  MAPR2;      // AF remap and debug I/O configuration register2 (AFIO_MAPR2)
+} AFIO_TypeDef;
+
+// Event control register (AFIO_EVCR)
+#define AFIO_EVCR_EVOE      (uint32_t)(1<<7)  // Event output enable
+#define AFIO_EVCR_PORT      (uint32_t)(7<<4)  // Port selection
+#define AFIO_EVCR_PIN       (uint32_t)(0xF)   // Pin selection
+
+enum {
+  AFIO_EVCR_PORT_PA = 0x00,
+  AFIO_EVCR_PORT_PB = 0x10,
+  AFIO_EVCR_PORT_PC = 0x20,
+  AFIO_EVCR_PORT_PD = 0x30,
+  AFIO_EVCR_PORT_PE = 0x40,
+};
+
+enum {
+  AFIO_EVCR_PIN_Px0  = 0x0, // Px0 selected
+  AFIO_EVCR_PIN_Px1  = 0x1, // Px1 selected
+  AFIO_EVCR_PIN_Px2  = 0x2, // Px2 selected
+  AFIO_EVCR_PIN_Px3  = 0x3, // Px3 selected
+  AFIO_EVCR_PIN_Px4  = 0x4, // Px4 selected
+  AFIO_EVCR_PIN_Px5  = 0x5, // Px5 selected
+  AFIO_EVCR_PIN_Px6  = 0x6, // Px6 selected
+  AFIO_EVCR_PIN_Px7  = 0x7, // Px7 selected
+  AFIO_EVCR_PIN_Px8  = 0x8, // Px8 selected
+  AFIO_EVCR_PIN_Px9  = 0x9, // Px9 selected
+  AFIO_EVCR_PIN_Px10 = 0xA, // Px10 selected
+  AFIO_EVCR_PIN_Px11 = 0xB, // Px11 selected
+  AFIO_EVCR_PIN_Px12 = 0xC, // Px12 selected
+  AFIO_EVCR_PIN_Px13 = 0xD, // Px13 selected
+  AFIO_EVCR_PIN_Px14 = 0xE, // Px14 selected
+  AFIO_EVCR_PIN_Px15 = 0xF, // Px15 selected
+};
+
+// AF remap and debug I/O configuration register (AFIO_MAPR)
+// External interrupt configuration register x (AFIO_EXTICRx)
+// AF remap and debug I/O configuration register2 (AFIO_MAPR2)
 
 /* ToDo: add here your device specific peripheral access structure typedefs
          including bit definitions for Pos/Msk macros
